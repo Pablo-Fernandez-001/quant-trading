@@ -91,7 +91,7 @@ class FXCM:
         Función que paraleliza la ejecución del método 'streaming_datos'
         """
         
-        threading.Thread(target=self.streaming_datos, args=(simbolo, n)).start()
+        threading.Thread(target=self.streaming_datos, args=(simbolo, n)).start() 
           
         
 # Ejecutar
