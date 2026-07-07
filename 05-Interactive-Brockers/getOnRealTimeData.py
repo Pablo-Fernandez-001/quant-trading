@@ -14,9 +14,9 @@ import threading
 import time
 
 # create class
-class InteractiveBrockers(EClient, EWrapper):
+class InteractiveBrokers(EClient, EWrapper):
     """
-        To make easier the API's interaction with InteractiveBrockers
+        To make easier the API's interaction with InteractiveBrokers
     """
     
     def __init__(self):
@@ -45,7 +45,7 @@ class InteractiveBrockers(EClient, EWrapper):
         # Tick type, more documentation -> https://interactivebrokers.github.io/tws-api/tick_types.html
         
 #Creates the instances
-ib = InteractiveBrockers()
+ib = InteractiveBrokers()
 #Conectarnos a OB TWS o IB Gateway (By default, TWS uses the 7497 port and the Gateway uses the port 4001)
 ib.connect(host="127.0.0.1", port=7497, clientId=1)
 api_thread = threading.Thread(target=ib.run)

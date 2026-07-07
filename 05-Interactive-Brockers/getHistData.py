@@ -15,9 +15,9 @@ import threading
 import pandas as pd
 
 # create class
-class InteractiveBrockers(EClient, EWrapper):
+class InteractiveBrokers(EClient, EWrapper):
     """
-        To make easier the API's interaction with InteractiveBrockers
+        To make easier the API's interaction with InteractiveBrokers
     """
     
     def __init__(self):
@@ -58,7 +58,7 @@ class InteractiveBrockers(EClient, EWrapper):
         print(f"Downloaded data for ID: {reqId}, into the period {start}.{end}")
         
 #Creates the instances
-ib = InteractiveBrockers()
+ib = InteractiveBrokers()
 #Conectarnos a OB TWS o IB Gateway (By default, TWS uses the 7497 port and the Gateway uses the port 4001)
 ib.connect(host="127.0.0.1", port=7497, clientId=1)
 api_thread = threading.Thread(target=ib.run)

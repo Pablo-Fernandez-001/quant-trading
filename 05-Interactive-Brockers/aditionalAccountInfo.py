@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jul  5 12:53:36 2026
+Created on Tue Jul  7 13:29:28 2026
 
 @author: pabda
 """
 
-# Import libs
+#To close if the order it's going bad
 from ibapi.client import EClient # Comunication to Interactive Brokers (IB)
 from ibapi.wrapper import EWrapper # That one gets the servers answer and process them
 import threading
@@ -42,6 +42,14 @@ class InteractiveBrokers(EClient, EWrapper):
         #print the information
         print(f"Account summary - Account: {account}, Tag: {tag}, Value: {value}, currency: {currency}")
 
+    def pnl(self, reqId, dailyPnL, unrealizedPnL, realizedPnL):
+        """
+            This method returns Profit or loss to the account
+        """
+        
+        #Show by console
+        # Mostrar por consola
+        print(f"ReqId:{reqId}, \n Daily Profit/Lost: {dailyPnL} \n Unrealized Profit/Lost: {unrealizedPnL} \n Realized Profit/Lost: {realizedPnL}" )
 
 #Creates the instances
 ib = InteractiveBrokers()
@@ -55,14 +63,9 @@ print("Active connection", ib.isConnected())
 # request account information
 ib.reqAccountSummary(requOd=1, groupName="All", tags="$LEDGER")
 
+#request account profit/lost into the account we need to run the befored code to show which one it is
+ib.reqPnL(reqId=2, account="", modelCode="")
+
 
 # Reminder:
-#   - Ensure that IB TWS or IB Gateway is running and configured to accept API connections. Without this,
-#     the connection from the Python script will not work.
-#   - Check the port settings:
-#       * TWS Live Trading: 7496
-#       * TWS Paper Trading: 7497
-#       * Gateway Live Trading: 4001
-#       * Gateway Paper Trading: 4002
-#   - You must enable the "Enable ActiveX and Socket Clients" option in TWS.
-#   - You must disable the "Read-Only API" option.
+#   - Most methods of the EWrapper base class must be overridden for correct information processing.
