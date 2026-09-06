@@ -1,66 +1,66 @@
 """
 original code example:
     # -*- coding: utf-8 -*-
-# Importar librerías
+# Import libraries
 import pandas_datareader as pdr # pip install pandas-datareader
 import pandas_datareader.data as web
 from datetime import datetime 
 import matplotlib.pyplot as plt
 
 
-# Obtener datos históricos
-fecha_inicio = "2020-01-01"
-fecha_final = "2024-01-01"
+# Get historical data
+start_date = "2020-01-01"
+end_date = "2024-01-01"
 ticker = "AMZN"
 
-# Fuente: Stooq
+# Source: Stooq
 try:
-    df = pdr.get_data_stooq(symbols=ticker, start=fecha_inicio, end=fecha_final)
+    df = pdr.get_data_stooq(symbols=ticker, start=start_date, end=end_date)
     df = df[::-1]
     print(df)
 except Exception as error:
-    print("No se pudo recuperar la información con error ->", error)
+    print("Could not retrieve the information due to error ->", error)
     
 
-# Fuente: Stooq
+# Source: Stooq
 try:
-    df = pdr.stooq.StooqDailyReader(symbols=ticker, start=fecha_inicio, end=fecha_final).read()
+    df = pdr.stooq.StooqDailyReader(symbols=ticker, start=start_date, end=end_date).read()
     df = df[::-1]
     print(df)
 except Exception as error:
-    print("No se pudo recuperar la información con error ->", error)
+    print("Could not retrieve the information due to error ->", error)
     
     
-# Fuente: Yahoo
+# Source: Yahoo
 try:
-    df = pdr.get_data_yahoo(symbols=ticker, start=fecha_inicio, end=fecha_final)
+    df = pdr.get_data_yahoo(symbols=ticker, start=start_date, end=end_date)
     df = df[::-1]
     print(df)
 except Exception as error:
-    print("No se pudo recuperar la información con error ->", error)
+    print("Could not retrieve the information due to error ->", error)
     
 
-# Descargar múltiples tickers
+# Download multiple tickers
 tickers = ["AMZN", "AAPL", "MSFT"]
-fecha_inicio = datetime(2020, 1, 1)
-fecha_final = datetime(2024, 1, 1)
-df = web.DataReader(name=tickers, data_source="stooq", start=fecha_inicio, end=fecha_final)
+start_date = datetime(2020, 1, 1)
+end_date = datetime(2024, 1, 1)
+df = web.DataReader(name=tickers, data_source="stooq", start=start_date, end=end_date)
     
     
 close = df["Close"]
     
     
-# Graficar
+# Plot
 close.plot(figsize=(22, 12))
-plt.title("Precios de Cierre", size=25)
-plt.xlabel("Fecha", size=20)
-plt.ylabel("Precios", size=20)
+plt.title("Close Prices", size=25)
+plt.xlabel("Date", size=20)
+plt.ylabel("Prices", size=20)
 plt.legend()
 plt.show()
     
     
-# Recordatorio:
-#   - Debemos de mantener actualizadas las librerías para evitar cualquier posible error (pip install --upgrade pandas-datareader)
+# Reminder:
+#   - We must keep the libraries updated to avoid possible errors (pip install --upgrade pandas-datareader)
 
 """
 

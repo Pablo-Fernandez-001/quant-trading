@@ -34,7 +34,7 @@ def MA_Crossover(df: pd.DataFrame, fast_length: int=9, slow_length: int = 26, co
     ----------
     param : int : len_lenta : Slow length to use in the MA Crossover calculation (default is 26).
     ----------
-    param : str : columna : Column to use in the MA Crossover calculation (default is "Close").
+    param : str : column : Column to use in the MA Crossover calculation (default is "Close").
     ----------
     Output:
     ----------

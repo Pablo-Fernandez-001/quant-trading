@@ -79,10 +79,10 @@ def getting_indexes(index: str = "S&P 500", file: str="index_links.json") -> pd.
 # Example (Reminder)
 if __name__ == "__main__":
     
-    # Definir índice
+    # Define index
     ticker = "S&P 500"
     file = "index_links.json"
     
-    # Obtener activos
+    # Get assets
     components = getting_indexes(ticker, file)
     print(components)

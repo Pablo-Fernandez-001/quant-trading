@@ -48,7 +48,7 @@ class InteractiveBrokers(EClient, EWrapper):
         """
         
         #Show by console
-        # Mostrar por consola
+        # Show in console
         print(f"ReqId:{reqId}, \n Daily Profit/Lost: {dailyPnL} \n Unrealized Profit/Lost: {unrealizedPnL} \n Realized Profit/Lost: {realizedPnL}" )
 
 #Creates the instances

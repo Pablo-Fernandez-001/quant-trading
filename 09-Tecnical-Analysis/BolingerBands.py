@@ -63,8 +63,8 @@ bb_plot = mpf.make_addplot(bb)
 mpf.plot(df, type="candle", style="yahoo", volume=True, figsize=(22, 10), addplot=bb_plot, figscale=2.0, title="Bollinger Bands")
 plt.show()
 
-#Recordatorio:
-# - Las Bandas de Bollinger pueden indicar niveles de sobrecompra y sobreventa cuando los precios tocan o cruzan
-# la banda superior e inferior, respectivamente.
-# - La reversión a la media indica que los precios tienden a regresar a un nivel promedio después de tocar las Bandas
-# de Bollinger, lo que puede ayudar a identificar oportunidades de trading.
+#Reminder:
+# - Bollinger Bands can indicate overbought and oversold levels when prices touch or cross
+# the upper and lower bands, respectively.
+# - Mean reversion indicates that prices tend to return to an average level after touching the Bollinger Bands,
+# which can help identify trading opportunities.

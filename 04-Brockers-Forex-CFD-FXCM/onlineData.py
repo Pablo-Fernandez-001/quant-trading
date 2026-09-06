@@ -5,46 +5,46 @@ Created on Wed Jan 28 23:29:38 2026
 @author: pabda
 """
 
- # Importar librerías
+ # Import libraries
 import fxcmpy
 import time
  
-# API Token de FXCM
+# FXCM API Token
 api_token = "API_TOKEN"
  
-# Crear una instancia de la conexión con la API de FXCM
-con = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
+# Create an instance of the FXCM API connection
+connection = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
  
-# Callback para procesar los datos de streaming
+# Callback to process streaming data
 def print_data(data, dataframe):
-    print("Datos recibidos:")
-    # Imprimir la última fila de datos
+    print("Received data:")
+    # Print the last row of data
     print(dataframe.tail(1)) 
  
-# Verificar que estamos conectados
-if con.is_connected():
-    # Instrumento a suscribirse
-    instrumento = "EUR/USD"
+# Verify that we are connected
+if connection.is_connected():
+    # Instrument to subscribe to
+    instrument = "EUR/USD"
  
-    # Suscribirse al instrumento (Esto empezará a recibir los datos)
-    con.subscribe_market_data(instrumento, (print_data,))
-    print(f"Suscrito a los datos de {instrumento}.")
+    # Subscribe to the instrument (this will start receiving data)
+    connection.subscribe_market_data(instrument, (print_data,))
+    print(f"Subscribed to {instrument} data.")
  
-    # Tiempo de inicio
-    inicio_tiempo = time.time()
-    duracion = 30  # Duración en segundos
+    # Start time
+    start_time = time.time()
+    duration = 30  # Duration in seconds
  
-    # Mantener el script en ejecución y recibir datos durante el tiempo especificado
-    while time.time() - inicio_tiempo < duracion:
-        time.sleep(1)  # Espera 1 segundo entre iteraciones
+    # Keep the script running and receive data for the specified time
+    while time.time() - start_time < duration:
+        time.sleep(1)  # Wait 1 second between iterations
  
-    # Desuscribirse y cerrar la conexión después de 30 segundos
-    con.unsubscribe_market_data(instrumento)
-    con.close()
-    print("Desconectado y suscripción cancelada después de 30 segundos.")
+    # Unsubscribe and close the connection after 30 seconds
+    connection.unsubscribe_market_data(instrument)
+    connection.close()
+    print("Disconnected and subscription canceled after 30 seconds.")
     
 else:
-    print("Error al conectar a la API")
+    print("Error connecting to the API")
  
-#- Recordatorio:
-#   - Se debe de dar un correcto tratamiento a los datos recibidos en tiempo real para poderlos aprovechar adecuadamente.
+#- Reminder:
+#   - Real-time data must be processed correctly in order to use it effectively.

@@ -5,18 +5,18 @@ Created on Wed Jan 28 23:31:20 2026
 @author: pabda
 """
 
-# Importar librerías
+# Import libraries
 import fxcmpy
 import pandas as pd
 import time
 import threading
  
  
-# Definir Clase
+# Define Class
 class FXCM:
  
     """
-    Clase que facilita la interacción con la API de FXCM.
+    Class that makes the interaction with the FXCM API easier.
     """
     
     def __init__(self, token: str) -> None:
@@ -25,96 +25,96 @@ class FXCM:
         Constructor.
         """
         
-        self.token_api = token
-        self.conexion = fxcmpy.fxcmpy(access_token=self.token_api, log_level='error')
-        self.precios = {}
+        self.api_token = token
+        self.connection = fxcmpy.fxcmpy(access_token=self.api_token, log_level='error')
+        self.prices = {}
         self.streaming = {}
-        self.detener_streaming = False
+        self.stop_streaming = False
     
     
-    def info_cuenta(self) -> dict:
+    def account_info(self) -> dict:
         
         """
-        Devuelve la información relacionada con la cuenta.
+        Returns the information related to the account.
         """
         
-        return self.conexion.get_accounts().T.to_dict()
+        return self.connection.get_accounts().T.to_dict()
  
  
-    def instrumentos(self) -> list:
+    def instruments(self) -> list:
         
         """
-        Devuelve una lista con los instrumentos disponibles en FXCM.
+        Returns a list with the instruments available in FXCM.
         """
         
-        return self.conexion.get_instruments()
+        return self.connection.get_instruments()
  
  
-    def obtener_datos_historicos(self, simbolos, inicio, fin, periodo) -> None:
+    def get_historical_data(self, symbols, start, end, period) -> None:
         
         """
-        Obtiene datos históricos para un símbolo o varios.
+        Gets historical data for one or multiple symbols.
         """
         
-        simbolos = [simbolos] if not isinstance(simbolos, list) else simbolos
-        for simbolo in simbolos:
-            datos = self.conexion.get_candles(simbolo, period=periodo, start=inicio, stop=fin)
-            self.precios[simbolo] = datos
+        symbols = [symbols] if not isinstance(symbols, list) else symbols
+        for symbol in symbols:
+            data = self.connection.get_candles(symbol, period=period, start=start, stop=end)
+            self.prices[symbol] = data
  
  
-    def streaming_datos(self, simbolo: str, n: int) -> None:
+    def streaming_data(self, symbol: str, n: int) -> None:
         
         """
-        Método que procesa los datos de streaming.
+        Method that processes streaming data.
         """
         
-        # Revisar si ya existe el ticker
-        if simbolo not in self.streaming:
-            self.streaming[simbolo] = pd.DataFrame(columns=["fecha", "bid", "ask"])
+        # Check if the ticker already exists
+        if symbol not in self.streaming:
+            self.streaming[symbol] = pd.DataFrame(columns=["date", "bid", "ask"])
             
-        contador = 0
-        while contador <= n:
-            precios = self.conexion.get_last_price(simbolo)
-            fecha = precios.index[0]
-            bid, ask = precios["Bid"], precios["Ask"]
-            nueva_fila = pd.DataFrame([[fecha, bid, ask]], columns=["fecha", "bid", "ask"])
-            self.streaming[simbolo] = pd.concat([self.streaming[simbolo], nueva_fila], ignore_index=True)
-            if self.detener_streaming:
+        counter = 0
+        while counter <= n:
+            prices = self.connection.get_last_price(symbol)
+            date = prices.index[0]
+            bid, ask = prices["Bid"], prices["Ask"]
+            new_row = pd.DataFrame([[date, bid, ask]], columns=["date", "bid", "ask"])
+            self.streaming[symbol] = pd.concat([self.streaming[symbol], new_row], ignore_index=True)
+            if self.stop_streaming:
                 break
             else:
                 time.sleep(1)
-            contador += 1
+            counter += 1
             
-    def streaming_paralelo(self, simbolo: str, n: int) -> None:
+    def parallel_streaming(self, symbol: str, n: int) -> None:
         
         """
-        Función que paraleliza la ejecución del método 'streaming_datos'
+        Function that parallelizes the execution of the 'streaming_data' method.
         """
         
-        threading.Thread(target=self.streaming_datos, args=(simbolo, n)).start() 
+        threading.Thread(target=self.streaming_data, args=(symbol, n)).start() 
           
         
-# Ejecutar
+# Execute
 if __name__ == "__main__":
-    # Instanciar
+    # Instantiate
     fxcm = FXCM(token="API_TOKEN")
-    # Obtener Información de la Cuenta
-    print("\nInformación de la Cuenta:\n")
-    print(fxcm.info_cuenta())
-    # Obtener Instrumentos
-    print("\nInstrumentos:\n")
-    print(fxcm.instrumentos())
-    # Obtener Datos Históricos
-    print("\nDatos Históricos:\n")
-    fxcm.obtener_datos_historicos(simbolos=["EUR/USD", "XAU/USD"], inicio="2023-01-01", fin="2024-01-01", periodo="D1")
-    print(fxcm.precios["EUR/USD"])
-    print(fxcm.precios["XAU/USD"])
-    # Streaming de Datos
-    print("\nStreaming de Datos:\n")
-    fxcm.streaming_datos(simbolo="EUR/USD", n=10)
+    # Get Account Information
+    print("\nAccount Information:\n")
+    print(fxcm.account_info())
+    # Get Instruments
+    print("\nInstruments:\n")
+    print(fxcm.instruments())
+    # Get Historical Data
+    print("\nHistorical Data:\n")
+    fxcm.get_historical_data(symbols=["EUR/USD", "XAU/USD"], start="2023-01-01", end="2024-01-01", period="D1")
+    print(fxcm.prices["EUR/USD"])
+    print(fxcm.prices["XAU/USD"])
+    # Data Streaming
+    print("\nData Streaming:\n")
+    fxcm.streaming_data(symbol="EUR/USD", n=10)
     print(fxcm.streaming["EUR/USD"])
-    # Streaming de Datos Paralelizado
-    print("\nStreaming de Datos Paralelizado:\n")
-    fxcm.streaming_paralelo(simbolo="EUR/USD", n=1000000)
+    # Parallelized Data Streaming
+    print("\nParallelized Data Streaming:\n")
+    fxcm.parallel_streaming(symbol="EUR/USD", n=1000000)
     time.sleep(10)
-    fxcm.detener_streaming = True
+    fxcm.stop_streaming = True

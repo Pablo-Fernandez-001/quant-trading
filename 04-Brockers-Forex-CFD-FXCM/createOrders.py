@@ -5,58 +5,58 @@ Created on Wed Jan 28 23:30:42 2026
 @author: pabda
 """
 
-# Importar librerías
+# Import libraries
 import fxcmpy
 import time
  
-# Clave API
+# API Token
 api_token = "API_TOKEN"
  
-# Crear una instancia de la conexión con la API de FXCM
-con = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
+# Create an instance of the FXCM API connection
+connection = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
  
-# Verificar que estamos conectados
-if con.is_connected():
-    # Definir el instrumento y los parámetros de la orden
-    instrumento = "EUR/USD"
-    cantidad = 10  # Tamaño de la posición (en lotes)
-    es_compra = True  # True para compra, False para venta
-    tipo_orden = "AtMarket"  # Tipo de orden
+# Verify that we are connected
+if connection.is_connected():
+    # Define the instrument and order parameters
+    instrument = "EUR/USD"
+    amount = 10  # Position size (in lots)
+    is_buy = True  # True for buy, False for sell
+    order_type = "AtMarket"  # Order type
  
-    # Enviar orden de compra
-    orden = con.open_trade(symbol=instrumento, is_buy=es_compra, amount=cantidad, time_in_force="GTC", order_type=tipo_orden)
-    print(f"Orden enviada para {instrumento}:")
+    # Send buy order
+    order = connection.open_trade(symbol=instrument, is_buy=is_buy, amount=amount, time_in_force="GTC", order_type=order_type)
+    print(f"Order sent for {instrument}:")
     
-    # Esperar a que se ejecute
+    # Wait for execution
     time.sleep(1)
  
-    # Mostrar detalles de la orden
-    print(orden)
+    # Show order details
+    print(order)
  
-    # Obtener posiciones abiertas
-    posiciones_abiertas = con.get_open_positions()
-    print("\nPosiciones abiertas:")
-    print(posiciones_abiertas)
+    # Get open positions
+    open_positions = connection.get_open_positions()
+    print("\nOpen positions:")
+    print(open_positions)
  
-    # Cerrar la posición después de un tiempo
-    time.sleep(10)  # Esperar 10 segundos antes de cerrar la posición
+    # Close the position after some time
+    time.sleep(10)  # Wait 10 seconds before closing the position
  
-    # Revisar que hay posiciones abiertas
-    if not posiciones_abiertas.empty:
-        id_posicion = posiciones_abiertas.iloc[0]["tradeId"]  # Obtener el ID de la posición
-        con.close_trade(trade_id=id_posicion, amount=cantidad)
-        print(f"\nPosición {id_posicion} cerrada.")
+    # Check if there are open positions
+    if not open_positions.empty:
+        position_id = open_positions.iloc[0]["tradeId"]  # Get the position ID
+        connection.close_trade(trade_id=position_id, amount=amount)
+        print(f"\nPosition {position_id} closed.")
     
-    # Obtener posiciones abiertas después de cerrar
-    posiciones_abiertas = con.get_open_positions()
-    print("\nPosiciones abiertas después de cerrar:")
-    print(posiciones_abiertas)
+    # Get open positions after closing
+    open_positions = connection.get_open_positions()
+    print("\nOpen positions after closing:")
+    print(open_positions)
  
 else:
-    print("Error al conectar a la API")
+    print("Error connecting to the API")
  
-# Desconectarse de la API
-con.close()
+# Disconnect from the API
+connection.close()
  
-#- Recordatorio: 
-#   - La gestión de creación y ejecución de órdenes debe de realizarse con mucho cuidado. 
+#- Reminder: 
+#   - Order creation and execution management must be handled very carefully. 

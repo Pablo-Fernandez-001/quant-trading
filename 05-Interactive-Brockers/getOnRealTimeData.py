@@ -41,7 +41,7 @@ class InteractiveBrokers(EClient, EWrapper):
             Method who gets on real time (with a delay)
         """
         # show price and type
-        print(f"Tick Price. TickerId: {reqId}, Type: {tickType}, Precio: {price}")
+        print(f"Tick Price. TickerId: {reqId}, Type: {tickType}, Price: {price}")
         # Tick type, more documentation -> https://interactivebrokers.github.io/tws-api/tick_types.html
         
 #Creates the instances

@@ -4,18 +4,18 @@ Created on Mon Jan 26 00:06:05 2026
 
 @author: pabda
 """
-# Importar librerías
+# Import libraries
 import tpqoa
 import pandas as pd
 import time
 import threading
 
 
-# Definir clase
+# Define class
 class Oanda:
     
     """
-    Clase que facilita la interacción con la API de OANDA.
+    Class that makes the interaction with the OANDA API easier.
     """
     
     def __init__(self, conf_file: str) -> None:
@@ -26,105 +26,105 @@ class Oanda:
         
         self.conf_file = conf_file
         self.oanda_api = tpqoa.tpqoa(conf_file=self.conf_file)
-        self.precios = {}   
+        self.prices = {}   
         self.streaming = {}
-        self.detener_streaming = False
+        self.stop_streaming = False
         
         
-    def info_cuenta(self) -> dict:
+    def account_info(self) -> dict:
         
         """
-        Devuelve la información relacionada con la cuenta.
+        Returns the information related to the account.
         """
         
         return self.oanda_api.get_account_summary()
     
     
-    def instrumentos(self) -> list:
+    def instruments(self) -> list:
         
         """
-        Devuelve una lista con los instrumentos disponibles en OANDA.
+        Returns a list with the instruments available in OANDA.
         """
         
         return self.oanda_api.get_instruments()
     
     
-    def obtener_datos(self, tickers, inicio, final, granulidad) -> None:
+    def get_data(self, tickers, start, end, granularity) -> None:
         
         """
-        Obtiene datos históricos para un ticker o un conjunto de ellos.
+        Gets historical data for one ticker or a group of them.
         """
         
-        # Descargar datos
+        # Download data
         tickers = [tickers] if not isinstance(tickers, list) else tickers
         
         for instrument in tickers:
-            precios = self.oanda_api.get_history(instrument=instrument, start=inicio, end=final, 
-                                                 granularity=granulidad, price="M")
-            self.precios[instrument] = precios
+            prices = self.oanda_api.get_history(instrument=instrument, start=start, end=end, 
+                                                granularity=granularity, price="M")
+            self.prices[instrument] = prices
             
     
-    def streaming_datos(self, ticker: str, n: int) -> None:
+    def streaming_data(self, ticker: str, n: int) -> None:
         
         """
-        Método que se encarga de darle tratamiento a los datos recibidos
+        Method that processes the received streaming data.
         """
     
-        # Revisar si ya existe el ticker
+        # Check if the ticker already exists
         if ticker not in self.streaming:
             self.streaming[ticker] = pd.DataFrame(columns=["time", "bid", "ask"])
-        contador = 0
-        while contador <= n:
+        counter = 0
+        while counter <= n:
             time_, bid, ask = self.oanda_api.get_prices(instrument=ticker)
             print(f"Time: {time_}, Bid: {bid}, Ask: {ask}")
-            nuevo_registro = pd.DataFrame([[time_, bid, ask]], columns=["time", "bid", "ask"])
-            # Concatenar
-            self.streaming[ticker] = pd.concat([self.streaming[ticker], nuevo_registro], ignore_index=True)
-            # Revisar si cesar ejecución
-            if self.detener_streaming:
+            new_record = pd.DataFrame([[time_, bid, ask]], columns=["time", "bid", "ask"])
+            # Concatenate
+            self.streaming[ticker] = pd.concat([self.streaming[ticker], new_record], ignore_index=True)
+            # Check if execution should stop
+            if self.stop_streaming:
                 break
             else: 
                 time.sleep(1)
-            # Incrementar contador
-            contador += 1
+            # Increase counter
+            counter += 1
             
             
-    def streaming_datos_paralelizado(self, ticker: str, n: int) -> None:
+    def parallel_streaming_data(self, ticker: str, n: int) -> None:
         
         """
-        Función que paraleliza la ejecución del método 'streaming_datos'
+        Function that parallelizes the execution of the 'streaming_data' method.
         """
        
-        # Paralelizar
-        threading.Thread(target=self.streaming_datos, args=(ticker, n)).start()
+        # Parallelize
+        threading.Thread(target=self.streaming_data, args=(ticker, n)).start()
 
 
-# Probar
+# Test
 if __name__ == "__main__":
-    # Instanciar
-    clase_oanda = Oanda(conf_file="config.cfg")
-    # Obtener Info Cuenta
-    print("\nInformación Cuenta:\n")
-    print(clase_oanda.info_cuenta())
-    # Obtener Instrumentos
-    print("\nInstrumentos:\n")
-    instrumentos = clase_oanda.instrumentos()
-    for nombre, ticker in instrumentos:
-        print("Nombre:", nombre, "Ticker:", ticker)
-    # Obtener Datos Históricos
-    print("\nInformación Histórica\n:")
-    clase_oanda.obtener_datos(tickers=["EUR_USD", "XAU_USD"], inicio="2023-01-01", final="2024-01-01", granulidad="D")
-    print(clase_oanda.precios["EUR_USD"])
-    print(clase_oanda.precios["XAU_USD"])
-    # Streaming de Datos
-    print("\nStreaming de Datos:\n")
-    clase_oanda.streaming_datos(ticker="EUR_USD", n=10)    
-    print(clase_oanda.streaming["EUR_USD"])
-    # Streaming de Datos Paralelizado
-    print("\nStreaming de Datos Paralelizado:\n")
-    clase_oanda.streaming_datos_paralelizado(ticker="EUR_USD", n=1000000)
+    # Instantiate
+    oanda = Oanda(conf_file="config.cfg")
+    # Get Account Information
+    print("\nAccount Information:\n")
+    print(oanda.account_info())
+    # Get Instruments
+    print("\nInstruments:\n")
+    instruments = oanda.instruments()
+    for name, ticker in instruments:
+        print("Name:", name, "Ticker:", ticker)
+    # Get Historical Data
+    print("\nHistorical Information\n:")
+    oanda.get_data(tickers=["EUR_USD", "XAU_USD"], start="2023-01-01", end="2024-01-01", granularity="D")
+    print(oanda.prices["EUR_USD"])
+    print(oanda.prices["XAU_USD"])
+    # Data Streaming
+    print("\nData Streaming:\n")
+    oanda.streaming_data(ticker="EUR_USD", n=10)    
+    print(oanda.streaming["EUR_USD"])
+    # Parallelized Data Streaming
+    print("\nParallelized Data Streaming:\n")
+    oanda.parallel_streaming_data(ticker="EUR_USD", n=1000000)
     time.sleep(10)
-    clase_oanda.detener_streaming = True
-    # Ejecutar Órdenes
-    print("\nEjecutar Órdenes\n:")
-    clase_oanda.oanda_api.create_order(instrument="EUR_USD", units=1000, ret=True)
+    oanda.stop_streaming = True
+    # Execute Orders
+    print("\nExecute Orders\n:")
+    oanda.oanda_api.create_order(instrument="EUR_USD", units=1000, ret=True)

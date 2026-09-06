@@ -32,13 +32,13 @@ plt.show()
 fig, ax = plt.subplots(figsize=(22, 12))
 
 for ticker in tickers_list:
-    precios = data[ticker]["Close"]
+    prices = data[ticker]["Close"]
 
     # If yfinance returns only one data column
-    if isinstance(precios, pd.DataFrame):
-        precios = precios.squeeze()
+    if isinstance(prices, pd.DataFrame):
+        prices = prices.squeeze()
 
-    precios.plot(
+    prices.plot(
         ax=ax,
         label=ticker
     )

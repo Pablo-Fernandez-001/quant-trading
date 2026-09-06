@@ -105,9 +105,9 @@ def SuperTrend(df: pd.DataFrame, length: int = 14, factor: float = 3.0) -> pd.Da
     
     ST_df = pd.DataFrame(index=df.index)
     ST_df["SuperTrend"] = Supertrend
-    ST_df["Tendencia Alcista"] = UpTrend
-    ST_df["Tendencia Bajista"] = DownTrend
-    ST_df["Cambio de Tendencia"] = TrendChange
+    ST_df["Bullish Trend"] = UpTrend
+    ST_df["Bearish Trend"] = DownTrend
+    ST_df["Trend Change"] = TrendChange
     
     return ST_df
     
@@ -118,11 +118,11 @@ df = pd.read_csv(file_path, index_col = "Date", parse_dates=True)
 sp = SuperTrend(df)
 #Plotting
 sp_plots = [
-    mpf.make_addplot(sp["Cambio de Tendencia"], label="Cambio de Tendencia", color="black", secondary_y=False),
-    mpf.make_addplot(sp["Tendencia Bajista"], label="Tendencia Bajista", color="red", secondary_y=False),
-    mpf.make_addplot(sp["Tendencia Alcista"], label="Tendencia Alcista", color="green", secondary_y=False)
+    mpf.make_addplot(sp["Trend Change"], label="Trend Change", color="black", secondary_y=False),
+    mpf.make_addplot(sp["Bearish Trend"], label="Bearish Trend", color="red", secondary_y=False),
+    mpf.make_addplot(sp["Bullish Trend"], label="Bullish Trend", color="green", secondary_y=False)
     ]
-mpf.plot(df, type="candle", style="yahoo", volume=True, figsize=(22, 10), addplot=sp_plots, figscale=3.0, title="Super Tendencia")
+mpf.plot(df, type="candle", style="yahoo", volume=True, figsize=(22, 10), addplot=sp_plots, figscale=3.0, title="SuperTrend")
 plt.show()
 
 # Reminder:

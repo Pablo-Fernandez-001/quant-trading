@@ -5,48 +5,48 @@ Created on Wed Jan 28 23:28:53 2026
 @author: pabda
 """
 
-# Importar librerías
+# Import libraries
 import fxcmpy
  
-# API obtenida de FXCM
+# API token obtained from FXCM
 api_token = "API_TOKEN"
  
-# Crear una instancia de la conexión con la API de FXCM
-con = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
+# Create an instance of the FXCM API connection
+connection = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
  
-# Verificar que estamos conectados
-if con.is_connected():
+# Verify that we are connected
+if connection.is_connected():
     
-    # Obtener datos históricos de mercado para EUR/USD
-    instrumento = "EUR/USD"
-    periodo = "D1"  # Periodo de las velas (D1 = diario)
-    numero_velas = 100  # Número de velas a obtener
+    # Get historical market data for EUR/USD
+    instrument = "EUR/USD"
+    period = "D1"  # Candle period (D1 = daily)
+    number_of_candles = 100  # Number of candles to retrieve
  
-    # Obtener cierto número de velas
-    datos = con.get_candles(instrumento, period=periodo, number=numero_velas)
-    print(f"Datos más recientes de {instrumento}:")
-    print(datos)
+    # Get a specific number of candles
+    data = connection.get_candles(instrument, period=period, number=number_of_candles)
+    print(f"Most recent data for {instrument}:")
+    print(data)
     
-    # Obtener datos entre fechas
-    inicio = "2023-01-01"
-    final = "2024-01-01"
-    precios = con.get_candles(instrumento, start=inicio, end=final, period=periodo)
-    print(f"Datos históricos de {instrumento}:")
-    print(precios)
+    # Get data between dates
+    start_date = "2023-01-01"
+    end_date = "2024-01-01"
+    prices = connection.get_candles(instrument, start=start_date, end=end_date, period=period)
+    print(f"Historical data for {instrument}:")
+    print(prices)
     
-    # Marcos de Tiempo Disponibles
+    # Available Time Frames
     # "m1", "m5", "m15", "m30", "H1", "H2", "H3", "H4", "H6", "H8", "D1", "W1", "M1"
     
-    # Obtener Precio más Reciente
-    precio_actual = con.get_last_price(instrumento)
-    print(f"El precio más reciente de {instrumento} es:")
-    print(precio_actual)
+    # Get Most Recent Price
+    current_price = connection.get_last_price(instrument)
+    print(f"The most recent price for {instrument} is:")
+    print(current_price)
     
 else:
-    print("Error al conectar a la API")
+    print("Error connecting to the API")
  
-# Desconectarse de la API
-con.close()
+# Disconnect from the API
+connection.close()
  
-#- Recordatorio:
-#   - Existe una limitación de 10 mil filas de información cuando se realiza una consulta.
+#- Reminder:
+#   - There is a limit of 10,000 rows of information per query.

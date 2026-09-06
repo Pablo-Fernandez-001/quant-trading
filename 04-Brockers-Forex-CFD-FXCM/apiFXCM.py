@@ -5,36 +5,36 @@ Created on Wed Jan 28 23:27:04 2026
 @author: pabda
 """
 
-# Importar librerías
+# Import libraries
 import fxcmpy
  
 # API Token
 api_token = "API_TOKEN"
  
-# Crear una instancia de la conexión con la API de FXCM
-con = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
+# Create an instance of the FXCM API connection
+connection = fxcmpy.fxcmpy(access_token=api_token, log_level="error")
  
-# Verificar que estamos conectados
-if con.is_connected():
-    # Obtener detalles de la cuenta
-    cuenta_detalles = con.get_accounts()
-    print("Detalles de la cuenta:")
-    print(cuenta_detalles)
+# Verify that we are connected
+if connection.is_connected():
+    # Get account details
+    account_details = connection.get_accounts()
+    print("Account details:")
+    print(account_details)
  
-    # Obtener resumen de la cuenta
-    cuenta_info = con.get_account_summary()
-    print("\nResumen de la cuenta:")
-    print(cuenta_info)
+    # Get account summary
+    account_info = connection.get_account_summary()
+    print("\nAccount summary:")
+    print(account_info)
  
-    # Obtener lista de instrumentos disponibles
-    instrumentos = con.get_instruments()
-    print("\nLista de instrumentos:")
-    print(instrumentos)
+    # Get the list of available instruments
+    instruments = connection.get_instruments()
+    print("\nList of instruments:")
+    print(instruments)
 else:
-    print("Error al conectar a la API")
+    print("Error connecting to the API")
  
-# Desconectarse de la API
-con.close()
+# Disconnect from the API
+connection.close()
  
-#- Recordatorio:
-#   - La API de FXCM también trabaja con token de autentificación que permite el acceso a la cuenta desde Python.
+#- Reminder:
+#   - The FXCM API also uses an authentication token that allows account access from Python.
