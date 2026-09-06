@@ -32,7 +32,7 @@ def Portfolio_Optimizator(returns: pd.DataFrame) -> dict:
     Sigma = volatilities_diagonal.dot(returns.corr()).dot(volatilities_diagonal) # Annualizated Covariance Matrix
     # Sigma = returns.cov() * 252 could be
     
-    #Objetive funtion to maximize the Sharp ratio coeficient
+    #Objetive funtion to maximize the Sharpe ratio coeficient
     def sharpe_ratio(weights, sigma, rf, waited_returns):
         portfolio_waited_returns = waited_returns.dot(weights)
         portfolio_variance = weights.dot(sigma).dot(weights)
@@ -62,10 +62,10 @@ def Portfolio_Optimizator(returns: pd.DataFrame) -> dict:
         "weights": optimizated_weight_sr,
         "returns" : optimizated_portfolio_returns_sr,
         "volatility": optimizated_volatility_sr_portfolio,
-        "sharp ratio": optimizated_portfolio_sharp_ratio
+        "sharpe ratio": optimizated_portfolio_sharp_ratio
         }
 
-# Mergin Sharp Ratio with Magic Formula to optimize better the results
+# Mergin Sharpe Ratio with Magic Formula to optimize better the results
 # Example (Returns)
 if __name__ == "__main__":
     #Selecting assets
